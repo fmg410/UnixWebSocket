@@ -3,107 +3,72 @@
 #include <SFML/Network.hpp>
 #include <vector>
 #include <algorithm>
+#include <type_traits>
+#include <string>
+#include <limits>
 
-struct Client
+#include "Server/RunServer.hpp"
+#include "Client/RunClient.hpp"
+
+
+
+
+
+/* const sf::Packet& operator>>(const sf::Packet& p, int32_t i)
 {
-    const char name[20];
-    const sf::IpAddress adress;
-    const unsigned short port;
-    bool operator==(const Client& client)
-    {
-        return adress == client.adress && port == client.port;
-    }
-};
-
-
-void runUdpServer(unsigned short serverPort)
-{
-    std::cout << "server run\n";
-    std::cin.ignore(10000, '\n');
-    std::cout << "server run\n";
-
-    sf::UdpSocket socket;
-
-    if (socket.bind(serverPort) != sf::Socket::Done)
-        return;
-
-    char buffer[100];
-
-    sf::IpAddress senderIp;
-    unsigned short senderPort;
-    std::size_t received;
-
-    if (socket.receive(buffer, sizeof(buffer), received, senderIp, senderPort) != sf::Socket::Done)
-        return;
-
-    std::cout << "Received message:\n"
-              << buffer;
-
-    const char response[] = "I received message\n";
-
-    if (socket.send(response, sizeof(response), senderIp, senderPort) != sf::Socket::Done)
-        return;
-
-    std::vector<Client> clients;
-
-    do
-    {
-        if (socket.receive(buffer, sizeof(buffer), received, senderIp, senderPort) != sf::Socket::Done)
-            return;
-
-        Client temp{"temp", senderIp, senderPort};
-        if(std::count(clients.begin(), clients.end(), temp) == 0)
-        {
-            clients.push_back(temp);
-        }
-
-        std::cout << "Received message:\n"
-                  << buffer << "\nFrom " << clients.at(0).adress << std::endl;
-    } while (true);
+    sf::Uint64 t;
+    p >> t;
+    t = static_cast<int32_t>(t);
+    return p;
 }
 
-void runUdpClient(unsigned short clientPort, sf::IpAddress serverIp, unsigned short serverPort)
+const sf::Packet& operator<<(const sf::Packet& p, int32_t i)
 {
-    std::cout << "client run";
-    std::cin.ignore(10000, '\n');
-    std::cout << "client run";
+    p << static_cast<sf::Int64>(i);
+    return p;
+} */
 
-    sf::UdpSocket socket;
 
-    if (socket.bind(clientPort) != sf::Socket::Done)
-        return;
 
-    char message[100] = "I am a client";
 
-    if (socket.send(message, sizeof(message), serverIp, serverPort) != sf::Socket::Done)
-        return;
-
-    char buffer[100];
-    std::size_t received;
-
-    if (socket.receive(buffer, sizeof(buffer), received, serverIp, serverPort) != sf::Socket::Done)
-        return;
-
-    std::cout << "Received response:\n"
-              << buffer;
-
-    do
-    {
-        std::cin >> message;
-        if (socket.send(message, sizeof(message), serverIp, serverPort) != sf::Socket::Done)
-            return;
-    } while (true);
-}
 
 int main(int argc, char *argv[])
 {
     const int serverPort = 50001;
-    if (argc == 1)
+
+    if (argc == 3)
+    {
+        bool success = true;
+        sf::IpAddress address(argv[1]);
+        if (address == sf::IpAddress::None)
+            success = false;
+
+        unsigned short port = 0;
+        try
+        {
+            port = std::stoi(std::string(argv[2]));
+        }
+        catch (...)
+        {
+            success = false;
+        }
+
+        if (success)
+            runUdpClient(port, address, serverPort);
+    }
+
+    std::cout << "c - client ; s - server ; empty - server" << std::endl;
+    char choice;
+    std::cin >> choice;
+    std::cin.ignore(10000, '\n');
+
+    if (choice == 'c')
         runUdpClient(sf::Socket::AnyPort, sf::IpAddress::getLocalAddress(), serverPort);
-    else
+    else if (choice == 's')
         runUdpServer(serverPort);
 
-    std::cin.ignore(10000, '\n');
+    runUdpServer(serverPort);
+
     std::cin.ignore(10000, '\n');
 
     return 0;
