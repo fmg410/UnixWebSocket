@@ -1,12 +1,21 @@
 #include "MessageManager.hpp"
 #include <algorithm>
+#include <iostream>
 
 void MessageManager::addMessage(std::string person, std::string contents, bool sentBySelf)
 {
     auto itr = std::find_if(conversations.begin(), conversations.end(), [&](const Conversation& c){return c.getPerson() == person;});
+
     if(itr == conversations.end())
-        throw 1;
-    itr->addMessage({contents, sentBySelf});
+    {
+        conversations.emplace_back(person);
+        conversations.at(conversations.size() - 1).addMessage({contents, sentBySelf});
+    }
+    else
+    {
+        itr->addMessage({contents, sentBySelf});
+    }
+
 }
 
 void MessageManager::receivedMessage(std::string person, std::string contents)

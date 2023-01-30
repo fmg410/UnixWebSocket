@@ -66,10 +66,10 @@ int main(int argc, char *argv[])
         runUdpClient(sf::Socket::AnyPort, sf::IpAddress::getLocalAddress(), serverPort);
     else if (choice == 's')
         runUdpServer(serverPort);
+    else
+        runUdpServer(serverPort);
 
-    runUdpServer(serverPort);
-
-    std::cin.ignore(10000, '\n');
+    //std::cin.ignore(10000, '\n');
 
     return 0;
 }

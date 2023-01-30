@@ -11,7 +11,7 @@
 #define clearConsole printf("\n\n\n")
 #endif
 
-static const int appId_ = 518906;
+static const unsigned int appId_ = 518906;
 
 enum class ClientMessageType
 {

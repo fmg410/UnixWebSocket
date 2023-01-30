@@ -1,0 +1,1 @@
+gcc save.c -o save

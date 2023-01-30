@@ -4,6 +4,6 @@
 #include <SFML/Network.hpp>
 #include "../Common.hpp"
 
-void runUdpClient(unsigned short clientPort, sf::IpAddress serverIp, unsigned short serverPort);
+void runUdpClient(unsigned short clientPort, const sf::IpAddress serverIp, unsigned short serverPort);
 
 #endif
