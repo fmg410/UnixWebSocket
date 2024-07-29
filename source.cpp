@@ -1,32 +1,7 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
-#include <vector>
-#include <algorithm>
-#include <type_traits>
-#include <string>
-#include <limits>
 
 #include "Server/RunServer.hpp"
 #include "Client/RunClient.hpp"
-
-
-
-
-
-/* const sf::Packet& operator>>(const sf::Packet& p, int32_t i)
-{
-    sf::Uint64 t;
-    p >> t;
-    t = static_cast<int32_t>(t);
-    return p;
-}
-
-const sf::Packet& operator<<(const sf::Packet& p, int32_t i)
-{
-    p << static_cast<sf::Int64>(i);
-    return p;
-} */
 
 
 
@@ -67,9 +42,7 @@ int main(int argc, char *argv[])
     else if (choice == 's')
         runUdpServer(serverPort);
     else
-        runUdpServer(serverPort);
-
-    //std::cin.ignore(10000, '\n');
+        runUdpClient(sf::Socket::AnyPort, sf::IpAddress::getLocalAddress(), serverPort);
 
     return 0;
 }

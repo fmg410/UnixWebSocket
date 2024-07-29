@@ -19,7 +19,7 @@ struct Client
     std::string password{};
     sf::IpAddress adress{};
     unsigned short port{};
-    //void runUdpClient(unsigned short clientPort, sf::IpAddress serverIp, unsigned short serverPort);
+
     bool operator==(const Client &client)
     {
         return adress == client.adress && port == client.port;

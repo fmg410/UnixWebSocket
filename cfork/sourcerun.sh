@@ -1,1 +1,0 @@
-gcc source.c -o app.exe

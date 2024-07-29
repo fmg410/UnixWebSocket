@@ -108,12 +108,6 @@ void messageReceiver(MessageManager& messageManager, std::mutex& MMessageManager
                 std::unique_lock<std::mutex> lock(MClientNames);
 
                 clientNames = names;
-
-                /* for(auto&& n : names)
-                {
-                    if(std::count(clientNames.begin(), clientNames.end(), n) == 0)
-                        clientNames.push_back(n);
-                } */
             }
 
     }
@@ -179,7 +173,6 @@ void runUdpClient(unsigned short clientPort, const sf::IpAddress serverIp, unsig
         if (socket.send(packet, serverIp, serverPort) != sf::Socket::Done)
             return;
     }
-
 
     do
     {
